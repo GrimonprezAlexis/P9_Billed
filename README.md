@@ -15,11 +15,11 @@ Billed, product Sass soltion for teams RH.
 
 ### Tools
 
-Chrome Debugger
+> Chrome Debugger
 
 ### Resources
 
-[Back-end](https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back)
-[Front-end](https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Front)
-[Exemple test plan End-to-End](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fcourse.oc-static.com%2Fprojects%2FDA%2BJSR_P9%2FBilled%2B-%2BE2E%2Bparcours%2Badministrateur.docx&wdOrigin=BROWSELINK)
-[OCR Projet](https://openclassrooms.com/fr/paths/314/projects/809/assignment)
+- [Back-end](https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back)
+- [Front-end](https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Front)
+- [Exemple test plan End-to-End](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fcourse.oc-static.com%2Fprojects%2FDA%2BJSR_P9%2FBilled%2B-%2BE2E%2Bparcours%2Badministrateur.docx&wdOrigin=BROWSELINK)
+- [OCR Projet](https://openclassrooms.com/fr/paths/314/projects/809/assignment)
