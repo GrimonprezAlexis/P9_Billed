@@ -13,7 +13,7 @@ const row = (bill) => {
       <td>${bill.amount} €</td>
       <td>${bill.status}</td>
       <td>
-        ${Actions(bill.fileUrl)}
+        ${Actions(bill)}
       </td>
     </tr>
     `)
