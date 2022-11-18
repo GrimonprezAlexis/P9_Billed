@@ -20,8 +20,11 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
-  const filteredData = [...data].sort((a, b) => (( new Date(a.date).getTime() < new Date(b.date).getTime()) ? 1 : -1))
-  return (filteredData && filteredData.length) ? filteredData.map(bill => row(bill)).join("") : ""
+  if (data && data.length) {
+    const filteredData = [...data].sort((a, b) => (( new Date(a.date).getTime() < new Date(b.date).getTime()) ? 1 : -1))
+    return (filteredData && filteredData.length) ? filteredData.map(bill => row(bill)).join("") : ""
+  }
+  return "";
 }
 
 export default ({ data: bills, loading, error }) => {
