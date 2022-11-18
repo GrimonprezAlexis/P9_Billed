@@ -23,11 +23,9 @@ export default class NewBill {
    * @param {string} fileName 
    */
   checkFileName = (fileName) => {
-    let fileExtension = ""
+    let fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)
     let acceptExtensions = ['jpeg', 'jpg', 'png', 'gif']
-    if (fileName.lastIndexOf(".") > 0) {
-      fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)
-    }
+
     if (acceptExtensions.indexOf(fileExtension.toLowerCase()) > -1) {
         document.getElementById('errorFileType').classList.add('hideErrorMessage');
         this.handleStoreBillsCreate(fileName)
@@ -35,8 +33,8 @@ export default class NewBill {
     else {
       document.getElementById('errorFileType').classList.remove('hideErrorMessage');
       this.document.querySelector(`input[data-testid='file']`).value = null;
-      console.log("You must select a JPEG, JPG, PNG, GIF file for upload");
     }
+
   }
 
   /**
@@ -59,7 +57,6 @@ export default class NewBill {
         }
       })
       .then(({fileUrl, key}) => {
-        console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName

@@ -11,9 +11,27 @@ import { localStorageMock } from "../__mocks__/localStorage.js"
 import mockStore from "../__mocks__/store"
 import userEvent from "@testing-library/user-event"
 import BillsUI from "../views/BillsUI.js"
+import Store from '../app/Store';
 
 const onNavigate = (pathname) => {
   document.body.innerHTML = ROUTES({ pathname });
+};
+
+// Init newBill
+const newBill = {
+    id: 'QcCK3SzECmaZAGRrHjaC',
+    status: 'refused',
+    pct: 20,
+    amount: 200,
+    email: 'a@a',
+    name: 'newBill',
+    vat: '40',
+    fileName: 'preview-facture-free-201801-pdf-1.jpg',
+    date: '2002-02-02',
+    commentAdmin: 'pas la bonne facture',
+    commentary: 'test2',
+    type: 'Restaurants et bars',
+    fileUrl: 'https://firebasestorage.googleapis.com/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=4df6ed2c-12c8-42a2-b013-346c1346f732'
 };
 
 describe("Given I am connected as an employee", () => {
@@ -42,6 +60,69 @@ describe("Given I am connected as an employee", () => {
     });  
   })
 })
+
+
+describe('When I choose an image to upload', () => {
+  test('Then the file input should get the file name', () => {
+      const html = NewBillUI();
+      document.body.innerHTML = html;
+      const newBill = new NewBill({
+          document,
+          onNavigate,
+          store: null,
+          localStorage: window.localStorage,
+      });
+      const handleChangeFile = jest.fn(() => newBill.handleChangeFile);
+      const inputFile = screen.getByTestId('file');
+      inputFile.addEventListener('change', handleChangeFile);
+      fireEvent.change(inputFile, {
+          target: {
+              files: [new File(['image.png'], 'image.png', {
+                  type: 'image/png'
+              })],
+          }
+      });
+      expect(handleChangeFile).toBeCalled();
+      expect(inputFile.files[0].name).toBe('image.png');
+      expect(screen.getByText('Envoyer une note de frais')).toBeTruthy();
+      expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy();
+  });
+
+  test('Then the file extension is invalid', () => {
+          Object.defineProperty(window, "localStorage", {
+        value: localStorageMock,
+      });
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
+
+      const html = NewBillUI();
+      document.body.innerHTML = html;
+      const store = null;
+
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store,
+        localStorage: window.localStorage,
+      });
+      const handleChangeFile = jest.fn(newBill.handleChangeFile);
+      const inputFile = screen.getByTestId("file");
+      inputFile.addEventListener("change", handleChangeFile);
+      fireEvent.change(inputFile, {
+        target: {
+          files: [new File(["image.pdf"], "image.pdf", { type: "image/pdf" })],
+        },
+      });
+      expect(handleChangeFile).toHaveBeenCalled();
+      expect(inputFile.files[0].name).toBe("image.pdf");
+      expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy();
+  })
+});
+
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page and I add an image file", () => {
@@ -133,6 +214,36 @@ describe("Given I am connected as an employee", () => {
       expect(handleSubmit).toHaveBeenCalled();
       expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy();
     });
+
+    test('Then the error message should be display', async () => {
+        const html = NewBillUI();
+        document.body.innerHTML = html;
+
+        // Init newBill
+        const newBill = new NewBill({
+            document,
+            onNavigate,
+            Store,
+            localStorage: window.localStorage,
+        });
+
+        const handleChangeFile = jest.fn(() => newBill.handleChangeFile);
+        const inputFile = screen.getByTestId('file');
+        inputFile.addEventListener('change', handleChangeFile);
+        fireEvent.change(inputFile, {
+            target: {
+                files: [new File(['image.exe'], 'image.exe', {
+                    type: 'image/exe'
+                })],
+            }
+        });
+        expect(handleChangeFile).toBeCalled();
+        expect(inputFile.files[0].name).toBe('image.exe');
+        expect(screen.getByText('Envoyer une note de frais')).toBeTruthy();
+        await waitFor(() => {
+            expect(screen.getByTestId('errorFile').classList).toHaveLength(0);
+        });
+    });
   });
 });
 
@@ -159,6 +270,7 @@ describe("Given I am a user connected as Employee", () => {
       }
       const bills = await mockStore.bills().create(bill);
       expect(getSpy).toHaveBeenCalledTimes(1);
+      expect(bill).toHaveProperty("fileName")
     });
 
     test("Add bill to API and fails with 404 message error", async () => {
@@ -179,6 +291,39 @@ describe("Given I am a user connected as Employee", () => {
       const message = await screen.getByText(/Erreur 500/);
       expect(message).toBeTruthy();
     });
+
+    test('Then create Bill and redirect to Bills', async () => {
+        const html = NewBillUI();
+        document.body.innerHTML = html;
+
+        const bill = new NewBill({
+            document,
+            onNavigate,
+            Store,
+            localStorage: window.localStorage,
+        });
+
+        bill.create = (bill) => bill;        
+
+        // Filling DOM elements
+        document.querySelector(`select[data-testid='expense-type']`).value = newBill.type;
+        document.querySelector(`input[data-testid='expense-name']`).value = newBill.name;
+        document.querySelector(`input[data-testid='amount']`).value = newBill.amount;
+        document.querySelector(`input[data-testid='datepicker']`).value = newBill.date;
+        document.querySelector(`input[data-testid='vat']`).value = newBill.vat;
+        document.querySelector(`input[data-testid='pct']`).value = newBill.pct;
+        document.querySelector(`textarea[data-testid='commentary']`).value = newBill.commentary;
+        bill.fileUrl = newBill.fileUrl;
+        bill.fileName = newBill.fileName;
+
+        const submit = screen.getByTestId('form-new-bill');
+        const handleSubmit = jest.fn((e) => bill.handleSubmit(e));
+        submit.addEventListener('click', handleSubmit);
+        userEvent.click(submit);
+
+        expect(handleSubmit).toHaveBeenCalled();
+        expect(bill).toHaveProperty("fileName")
+    });
+
   });
 });
-
