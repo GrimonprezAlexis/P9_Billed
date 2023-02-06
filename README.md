@@ -3,13 +3,13 @@ Clone this project :
 
 Open Billed-app-FR-Back-main
 - Install npm dependencies using `npm install`
-- Use `npm run:dev` to run the API
+> Use `npm run:dev` to run the API
 
 Open Billed-app-FR-Front-main folder
 - Install npm dependencies using `npm install`
 - Use `npm run test` to run all Jest tests
-- Use `live-server` and go to `http://127.0.0.1:8080/coverage/lcov-report/` to show coverage report
-- Use `http://127.0.0.1:8080` to run application
+> Use `live-server` and go to `http://127.0.0.1:8080/coverage/lcov-report/` to show coverage report
+> Use `http://127.0.0.1:8080` to run application
 
 ## Accounts :
 ### administrateur : 
