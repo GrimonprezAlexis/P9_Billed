@@ -17,6 +17,9 @@ Open Billed-app-FR-Front-main folder
 ## About 
 [Node 18.14.0](https://nodejs.org/download/release/v18.14.0/)
 
+## Test all
+`npm t`
+
 ## Accounts :
 ### administrateur : 
 ```
