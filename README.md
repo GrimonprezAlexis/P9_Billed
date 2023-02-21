@@ -14,6 +14,9 @@ Open Billed-app-FR-Front-main folder
 
 > Use `http://127.0.0.1:8080` to run application
 
+## About 
+[Node 18.14.0](https://nodejs.org/download/release/v18.14.0/)
+
 ## Accounts :
 ### administrateur : 
 ```
@@ -42,7 +45,7 @@ Billed, product Sass soltion for teams RH.
 > Chrome Debugger
 
 ### Resources
-
+- [Rapport Bug Kanban Notion](https://www.notion.so/a7a612fc166747e78d95aa38106a55ec?v=2a8d3553379c4366b6f66490ab8f0b90)
 - [Back-end](https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-back)
 - [Front-end](https://github.com/OpenClassrooms-Student-Center/Billed-app-FR-Front)
 - [Exemple test plan End-to-End](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fcourse.oc-static.com%2Fprojects%2FDA%2BJSR_P9%2FBilled%2B-%2BE2E%2Bparcours%2Badministrateur.docx&wdOrigin=BROWSELINK)
