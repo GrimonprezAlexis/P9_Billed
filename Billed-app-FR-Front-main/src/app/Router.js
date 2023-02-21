@@ -9,7 +9,7 @@ import DashboardUI from "../views/DashboardUI.js"
 
 import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 
-export default () => {
+const Router = () => {
   const rootDiv = document.getElementById('root')
   rootDiv.innerHTML = ROUTES({ pathname: window.location.pathname })
 
@@ -113,4 +113,6 @@ export default () => {
 
   return null
 }
+
+export default Router;
 

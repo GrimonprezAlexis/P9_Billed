@@ -11,7 +11,7 @@ import {ROUTES,  ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store"
 
-import router from "../app/Router.js";
+import Router from "../app/Router.js";
 import Bills from "../containers/Bills.js";
 
 const onNavigate = (pathname) => {
