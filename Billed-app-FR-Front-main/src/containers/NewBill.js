@@ -16,6 +16,26 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
 
+  /**
+   * Check file extension is valid or not 
+   * Case invalid --> add class 'hideErrorMessage' to show error message and empty the entry
+   * Cas valid --> remove class 'hideErrorMessage'
+   * @param {string} fileName 
+   */
+  checkFileName = (fileName) => {
+    let fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)
+    let acceptExtensions = ['jpeg', 'jpg', 'png', 'gif']
+
+    if (acceptExtensions.indexOf(fileExtension.toLowerCase()) > -1) {
+        document.getElementById('errorFileType').classList.add('hideErrorMessage');
+        this.handleStoreBillsCreate(fileName)
+    }
+    else {
+      document.getElementById('errorFileType').classList.remove('hideErrorMessage');
+      this.document.querySelector(`input[data-testid='file']`).value = null;
+    }
+
+  }
 
   /**
    * Create form data and use create store
@@ -43,33 +63,12 @@ export default class NewBill {
       }).catch(error => console.error(error))
   }
 
-  /**
-   * Handle file upload
-   * @param {Event} e 
-   */
-  handleChangeFile = (e) => {
-    const file = this.document.querySelector(`input[data-testid='file']`).files[0];
-    // Added image format check provided
-    const extensionCheck = /(png|jpg|jpeg)/g;
-    const extension = file.name.split('.').pop();
-
-    /**
-     * if the extension is valid, we accept and add the class 'hideErrorMessage',
-     * otherwise we empty the entry, and remove the class 'hideErrorMessage'
-     * which will show the error message
-     */
-    if (extension.toLowerCase().match(extensionCheck)) {
-      document.getElementById('errorFileType').classList.add('hideErrorMessage');
-      const filePath = e.target.value.split(/\\/g);
-      const fileName = filePath[filePath.length - 1];
-      this.handleStoreBillsCreate(fileName, file);
-    } else {
-      document.getElementById('errorFileType').classList.remove('hideErrorMessage');
-      this.document.querySelector(`input[data-testid='file']`).value = null;
-    };
+  handleChangeFile = e => {
+    e.preventDefault()
+    const filePath = e.target.value.split(/\\/g)
+    const fileName = filePath[filePath.length-1]
+    this.checkFileName(fileName)
   }
-
-
 
   handleSubmit = e => {
     e.preventDefault()
