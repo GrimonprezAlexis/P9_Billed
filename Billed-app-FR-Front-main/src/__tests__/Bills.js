@@ -175,6 +175,8 @@ describe("Given I am a user connected as Employee", () => {
 
        // The number of bills must be 4
       expect(result.length).toBe(4);
+
+      expect(result[0]).toHaveProperty('date');
     })
   })
 
