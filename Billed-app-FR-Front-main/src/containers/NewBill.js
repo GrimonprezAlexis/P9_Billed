@@ -15,59 +15,40 @@ export default class NewBill {
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
-
-  /**
-   * Check file extension is valid or not 
-   * Case invalid --> add class 'hideErrorMessage' to show error message and empty the entry
-   * Cas valid --> remove class 'hideErrorMessage'
-   * @param {string} fileName 
-   */
-  checkFileName = (fileName) => {
-    let fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)
-    let acceptExtensions = ['jpeg', 'jpg', 'png', 'gif']
-
-    if (acceptExtensions.indexOf(fileExtension.toLowerCase()) > -1) {
-        document.getElementById('errorFileType').classList.add('hideErrorMessage');
-        this.handleStoreBillsCreate(fileName)
-    }
-    else {
-      document.getElementById('errorFileType').classList.remove('hideErrorMessage');
-      this.document.querySelector(`input[data-testid='file']`).value = null;
-    }
-
-  }
-
-  /**
-   * Create form data and use create store
-   * @param {string} fileName 
-   */
-  handleStoreBillsCreate(fileName){
-    const formData = new FormData()
+  handleChangeFile = e => {    
+    e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const filePath = e.target.value.split(/\\/g)
+    const fileName = filePath[filePath.length-1]
+    const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
+    const fileType = file.type.substring(6)
 
-    this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
-      .then(({fileUrl, key}) => {
-        this.billId = key
-        this.fileUrl = fileUrl
-        this.fileName = fileName
-      }).catch(error => console.error(error))
-  }
+    if (fileType == "png" || fileType == "jpg" || fileType == "jpeg") {
+      document.getElementById('errorFileType').classList.remove('hideErrorMessage')
 
-  handleChangeFile = e => {
-    e.preventDefault()
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
-    this.checkFileName(fileName)
+      formData.append('file', file)
+      formData.append('email', email)
+      this.store
+          .bills()
+          .create({
+              data: formData,
+              headers: {
+                  noContentType: true
+              }
+          })
+          .then(({fileUrl, key}) => {
+              this.billId = key
+              this.fileUrl = fileUrl
+              this.fileName = fileName
+          }).catch(error => console.error(error))
+    } else {
+      // affichage de l'erreur
+      this.document.querySelector(`input[data-testid="file"]`).value = null
+      document.getElementById('errorFileType').classList.add('error')
+    }
   }
 
   handleSubmit = e => {
